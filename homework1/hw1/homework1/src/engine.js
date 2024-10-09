@@ -52,9 +52,9 @@ function GAMES202Main() {
 
 	// Add shapes
 	
-	let floorTransform = setTransform(0, 0, -30, 0, 0, 0, 4, 4, 4);
-	let obj1Transform = setTransform(0, 0, 0, 0, 0, 0, 20, 20, 20);
-	let obj2Transform = setTransform(40, 0, -40, 0, 0, 0, 10, 10, 10);
+	let floorTransform = setTransform(0, 0, -30, 4, 4, 4);
+	let obj1Transform = setTransform(0, 0, 0, 20, 20, 20);
+	let obj2Transform = setTransform(40, 0, -40, 10, 10, 10);
 
 	loadOBJ(renderer, 'assets/mary/', 'Marry', 'PhongMaterial', obj1Transform);
 	loadOBJ(renderer, 'assets/mary/', 'Marry', 'PhongMaterial', obj2Transform);
@@ -69,34 +69,31 @@ function GAMES202Main() {
 	// loadOBJ(renderer, 'assets/basic/', 'sphere', 'PhongMaterial', sphereTransform);
 	//loadOBJ(renderer, 'assets/basic/', 'plane', 'PhongMaterial', floorTransform);
 
-	let prevTime = 0;
+
+	function createGUI() {
+		const gui = new dat.gui.GUI();
+		// const panelModel = gui.addFolder('Model properties');
+		// panelModelTrans.add(GUIParams, 'x').name('X');
+		// panelModel.open();
+	}
+	createGUI();
 
 	function mainLoop(now) {
 		cameraControls.update();
-		let deltaTime = (now - prevTime) / 1000;
-		renderer.render(now, deltaTime);
+
+		renderer.render();
 		requestAnimationFrame(mainLoop);
-		prevTime = now;
 	}
 	requestAnimationFrame(mainLoop);
 }
 
-function setTransform(t_x, t_y, t_z, r_x, r_y, r_z, s_x, s_y, s_z) {
+function setTransform(t_x, t_y, t_z, s_x, s_y, s_z) {
 	return {
 		modelTransX: t_x,
 		modelTransY: t_y,
 		modelTransZ: t_z,
-
-		modelRotateX: r_x,
-		modelRotateY: r_y,
-		modelRotateZ: r_z,
-
 		modelScaleX: s_x,
 		modelScaleY: s_y,
 		modelScaleZ: s_z,
 	};
-}
-
-function degrees2Radians(degrees){
-	return 3.1415927 / 180 * degrees;
 }

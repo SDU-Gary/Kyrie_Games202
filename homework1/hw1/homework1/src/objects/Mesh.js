@@ -1,7 +1,6 @@
 class TRSTransform {
-    constructor(translate = [0, 0, 0], rotate = [0,0,0], scale = [1, 1, 1]) {
+    constructor(translate = [0, 0, 0], scale = [1, 1, 1]) {
         this.translate = translate;
-		this.rotate = rotate;
         this.scale = scale;
     }
 }
@@ -14,9 +13,8 @@ class Mesh {
 		this.hasTexcoords = false;
 
 		const modelTranslation = [transform.modelTransX, transform.modelTransY, transform.modelTransZ];
-		const modelRatation = [transform.modelRotateX, transform.modelRotateY, transform.modelRotateZ];
 		const modelScale = [transform.modelScaleX, transform.modelScaleY, transform.modelScaleZ];
-		let meshTrans = new TRSTransform(modelTranslation, modelRatation, modelScale);
+		let meshTrans = new TRSTransform(modelTranslation, modelScale);
 		this.transform = meshTrans;
 
 		let extraAttribs = [];

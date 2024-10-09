@@ -1,3 +1,4 @@
+
 class MeshRender {
 
 	#vertexBuffer;
@@ -115,9 +116,6 @@ class MeshRender {
 		// Model transform
 		mat4.identity(modelMatrix);
 		mat4.translate(modelMatrix, modelMatrix, this.mesh.transform.translate);
-		mat4.rotateX(modelMatrix, modelMatrix, this.mesh.transform.rotate[0])
-		mat4.rotateY(modelMatrix, modelMatrix, this.mesh.transform.rotate[1])
-		mat4.rotateZ(modelMatrix, modelMatrix, this.mesh.transform.rotate[2])
 		mat4.scale(modelMatrix, modelMatrix, this.mesh.transform.scale);
 		// View transform
 		camera.updateMatrixWorld();
@@ -141,11 +139,6 @@ class MeshRender {
 		gl.uniform3fv(
 			this.shader.program.uniforms.uCameraPos,
 			[camera.position.x, camera.position.y, camera.position.z]);
-	}
-
-	bindNumSample(numSample) {
-		const gl = this.gl;
-		gl.uniform1i(this.shader.program.uniforms.NUM_SAMPLES, numSample);
 	}
 
 	bindMaterialParameters() {
@@ -180,11 +173,8 @@ class MeshRender {
 		}
 	}
 
-	draw(camera, transform) {
+	draw(camera) {
 		const gl = this.gl;
-
-		let modelViewMatrix = mat4.create();
-		let projectionMatrix = mat4.create();
 
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this.material.frameBuffer);
 		if (this.material.frameBuffer != null) {
@@ -196,10 +186,9 @@ class MeshRender {
 
 		gl.useProgram(this.shader.program.glShaderProgram);
 
-
 		// Bind geometry information
 		this.bindGeometryInfo();
-		
+
 		// Bind Camera parameters
 		this.bindCameraParameters(camera);
 

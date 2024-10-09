@@ -1,7 +1,7 @@
 class PhongMaterial extends Material {
 
-    constructor(color, specular, light, translate, rotate, scale, vertexShader, fragmentShader) {
-        let lightMVP = light.CalcLightMVP(translate, rotate, scale);
+    constructor(color, specular, light, translate, scale, vertexShader, fragmentShader) {
+        let lightMVP = light.CalcLightMVP(translate, scale);
         let lightIntensity = light.mat.GetIntensity();
 
         super({

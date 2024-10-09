@@ -17,7 +17,7 @@ class WebGLRenderer {
     addMeshRender(mesh) { this.meshes.push(mesh); }
     addShadowMeshRender(mesh) { this.shadowMeshes.push(mesh); }
 
-    render(time,deltaTime) {
+    render() {
         const gl = this.gl;
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
@@ -27,13 +27,6 @@ class WebGLRenderer {
 
         console.assert(this.lights.length != 0, "No light");
         console.assert(this.lights.length == 1, "Multiple lights");
-
-        for (let i = 0; i < this.meshes.length; i++) {
-            if(this.meshes[i].mesh.count > 10)//if the mesh is not a floor
-            {
-                this.meshes[i].mesh.transform.rotate[1] = this.meshes[i].mesh.transform.rotate[1] + degrees2Radians(10) * deltaTime;
-            }
-        }
 
         for (let l = 0; l < this.lights.length; l++) {
             // Draw light
@@ -52,7 +45,7 @@ class WebGLRenderer {
             for (let i = 0; i < this.meshes.length; i++) {
                 this.gl.useProgram(this.meshes[i].shader.program.glShaderProgram);
                 this.gl.uniform3fv(this.meshes[i].shader.program.uniforms.uLightPos, this.lights[l].entity.lightPos);
-                this.meshes[i].draw(this.camera, meshTrans);
+                this.meshes[i].draw(this.camera);
             }
         }
     }
