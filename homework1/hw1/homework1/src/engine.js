@@ -47,8 +47,12 @@ function GAMES202Main() {
 	let lightPos = [0, 80, 80];
 	let focalPoint = [0, 0, 0];
 	let lightUp = [0, 1, 0]
-	const directionLight = new DirectionalLight(5000, [1, 1, 1], lightPos, focalPoint, lightUp, true, renderer.gl);
+	const directionLight = new DirectionalLight(2500, [1, 1, 1], lightPos, focalPoint, lightUp, true, renderer.gl);
 	renderer.addLight(directionLight);
+
+	let lightPos2 = [90, 90, 0];
+	const directionLight2 = new DirectionalLight(2500, [1, 1, 1], lightPos2, focalPoint, lightUp, true, renderer.gl);
+	renderer.addLight(directionLight2);
 
 	// Add shapes
 	
@@ -82,7 +86,7 @@ function GAMES202Main() {
 
 	function mainLoop(now) {
 		cameraControls.update();
-		let deltaTime = now - prevTime;
+		let deltaTime = (now - prevTime)/1000;
 		renderer.render(now, deltaTime);
 		requestAnimationFrame(mainLoop);
 		prevTime = now;
@@ -107,5 +111,5 @@ function setTransform(t_x, t_y, t_z, r_x, r_y, r_z, s_x, s_y, s_z) {
 }
 
 function degrees2Radians(degrees){
-	return 3.1415927 / 18000 * degrees;
+	return 3.1415927 / 180 * degrees;
 }

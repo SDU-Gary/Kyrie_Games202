@@ -26,7 +26,7 @@ class WebGLRenderer {
         gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
         console.assert(this.lights.length != 0, "No light");
-        console.assert(this.lights.length == 1, "Multiple lights");
+        //console.assert(this.lights.length == 1, "Multiple lights");
 
         //模型旋转
         for (let i = 0; i < this.meshes.length; i++) {
@@ -44,12 +44,18 @@ class WebGLRenderer {
 
             // Draw light
             // TODO: Support all kinds of transform
-            this.lights[l].meshRender.mesh.transform.translate = this.lights[l].entity.lightPos;
+            let lightRotateSpped = [10, 80]
+            let lightPos = this.lights[l].entity.lightPos;
+            lightPos = vec3.rotateY(lightPos, lightPos, this.lights[l].entity.focalPoint, degrees2Radians(lightRotateSpped[l]) * deltaTime);
+            this.lights[l].entity.lightPos = lightPos; //给DirectionalLight的lightPos赋值新的位置，CalcLightMVP计算LightMVP需要用到
+            this.lights[l].meshRender.mesh.transform.translate = lightPos;
             this.lights[l].meshRender.draw(this.camera);
 
             // Shadow pass
             if (this.lights[l].entity.hasShadowMap == true) {
                 for (let i = 0; i < this.shadowMeshes.length; i++) {
+                    if(this.shadowMeshes[i].material.lightIndex != l)
+                        continue;
                     this.gl.useProgram(this.shadowMeshes[i].shader.program.glShaderProgram);
                     let translation = this.shadowMeshes[i].mesh.transform.translate;
                     let rotation = this.shadowMeshes[i].mesh.transform.rotate;
@@ -60,8 +66,17 @@ class WebGLRenderer {
                 }
             }
 
+            if(l != 0)
+            {
+                // 开启混合，把Additional Pass混合到Base Pass结果上，否则会覆盖Base Pass的渲染结果
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.ONE, gl.ONE);
+            }
+
             // Camera pass
             for (let i = 0; i < this.meshes.length; i++) {
+                if(this.meshes[i].material.lightIndex != l)
+                    continue;
                 this.gl.useProgram(this.meshes[i].shader.program.glShaderProgram);
                 //this.gl.uniform3fv(this.meshes[i].shader.program.uniforms.uLightPos, this.lights[l].entity.lightPos);
                 let translation = this.meshes[i].mesh.transform.translate;
@@ -72,6 +87,8 @@ class WebGLRenderer {
                 this.meshes[i].material.uniforms.uLightPos = { type: '3fv', value: this.lights[l].entity.lightPos }; // 光源方向计算、光源强度衰减、阴影采样
                 this.meshes[i].draw(this.camera);
             }
+
+            gl.disable(gl.BLEND);
         }
     }
 }
